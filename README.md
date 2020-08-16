@@ -22,6 +22,12 @@ Why?
 This will likely turn into a web app, this was an opportunity to start small and learn a little more about Node.js.
 On the plus side, it's very distraction free :)
 
+Add cards
+------
+- On the command line run: node addCards.js
+
+Here you will be able to add new cards to a specified deck. You can also provide examples (delimited by underscores). Each example will be shown along with the answer in spaced repetition practice.
+
 TODO: 
 - record the history and all data to a real db, do something interesting with it
 - refactor
