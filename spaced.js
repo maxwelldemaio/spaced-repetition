@@ -19,13 +19,13 @@ var fs = require('fs');
 var readline = require('readline');
 
 var cardFile = 'baseCards.json',
-    quizList = [],
-    quizTimer = 4000,
-    today = new Date(),
-    cards = [],
-    cardCounter = 0;
+  quizList = [],
+  quizTimer = 4000,
+  today = new Date(),
+  cards = [],
+  cardCounter = 0;
 
-today.setHours(0,0,0,0);
+today.setHours(0, 0, 0, 0);
 
 console.log("Welcome to Command Line Spaced Repetition!\n" +
   "After each word please grade yourself as follows:\n" +
@@ -37,7 +37,7 @@ console.log("Welcome to Command Line Spaced Repetition!\n" +
   "(5) Knew the answer immediately.");
 
 function readCardFile(file) {
-  fs.readFile(file, function(err, data) {
+  fs.readFile(file, function (err, data) {
     if (err) throw err;
     cards = JSON.parse(data);
     var count = cardQuizCount();
@@ -56,7 +56,7 @@ function getUserInput(question, next, card) {
   var rl = readline.createInterface(process.stdin, process.stdout);
   rl.setPrompt(question);
   rl.prompt();
-  rl.on('line', function(line) {
+  rl.on('line', function (line) {
     rl.close();
     if (!card) {
       next(line);
@@ -81,49 +81,56 @@ function startStopQuiz(line) {
 //Amount of cards up for quizzing today
 function cardQuizCount() {
   var count = 0;
-  for (var i=0; i<cards.length; i++) {
-      var c = cards[i];
-      var d = new Date(c.nextDate);
-      if (c.interval === 0 || !c.interval || d.getTime() === today.getTime()) {
-        count++;
-      }
+  for (var i = 0; i < cards.length; i++) {
+    var c = cards[i];
+    var d = new Date(c.nextDate);
+    if (c.interval === 0 || !c.interval || d.getTime() === today.getTime()) {
+      count++;
+    }
   }
   return count;
 }
 
 function getNextCard(card) {
-    if (!card) {
-      writeCardFile(cardFile); //Save to file
-      var count = cardQuizCount();
-      if (count) {
-        getUserInput("Done. Hit enter to repeat " + count + " cards graded 3 or lower, or type exit to finish", startStopQuiz);
-      } else {
-        getUserInput("Done for today. Don't forget to come back tomorrow. :) (enter to exit)", startStopQuiz);
-      }
-      return;
-    }
-    //Set Defaults if new card
-    if (!card.nextDate) { card.nextDate = today; }
-    if (!card.prevDate) { card.prevDate = today; }
-    if (!card.interval) { card.interval = 0; }
-    if (!card.reps) {  card.reps = 0; }
-    if (!card.EF) { card.EF = 2.5; }
-
-    var nextDate = new Date(card.nextDate); //convert to comparable date type
-    if (nextDate <= today) {
-      quizCard(card);
+  if (!card) {
+    writeCardFile(cardFile); //Save to file
+    var count = cardQuizCount();
+    if (count) {
+      getUserInput("Done. Hit enter to repeat " + count + " cards graded 3 or lower, or type exit to finish", startStopQuiz);
     } else {
-      cardCounter++;
-      getNextCard(cards[cardCounter]);
+      getUserInput("Done for today. Don't forget to come back tomorrow. :) (enter to exit)", startStopQuiz);
     }
+    return;
+  }
+  //Set Defaults if new card
+  if (!card.nextDate) { card.nextDate = today; }
+  if (!card.prevDate) { card.prevDate = today; }
+  if (!card.interval) { card.interval = 0; }
+  if (!card.reps) { card.reps = 0; }
+  if (!card.EF) { card.EF = 2.5; }
+
+  var nextDate = new Date(card.nextDate); //convert to comparable date type
+  if (nextDate <= today) {
+    quizCard(card);
+  } else {
+    cardCounter++;
+    getNextCard(cards[cardCounter]);
+  }
 }
 
 function quizCard(card) {
-    console.log("Side 1: " + card.side1);
-    setTimeout(function() {
-      console.log("Side 2: " + card.side2);
-      getUserInput("Grade> ", updateCard, card);
-    }, quizTimer);
+  console.log("Side 1: " + card.side1);
+  setTimeout(function () {
+    console.log("Side 2: " + card.side2);
+    // Print examples if any exist
+    if (card.examples) {
+      console.log("Examples:");
+      for (var x = 0; x < card.examples.length; x++) {
+        console.log(card.examples[x]);
+      };
+    };
+    getUserInput("Grade> ", updateCard, card);
+  }, quizTimer);
 }
 
 function updateCard(line, card) {
@@ -145,15 +152,15 @@ function updateCard(line, card) {
 //        (4-5) Reps + 1, interval is calculated using EF, increasing in time.
 function calcIntervalEF(card, grade) {
   var oldEF = card.EF,
-      newEF = 0,
-      nextDate = new Date(today);
+    newEF = 0,
+    nextDate = new Date(today);
 
   if (grade < 3) {
     card.reps = 0;
     card.interval = 0;
   } else {
 
-    newEF = oldEF + (0.1 - (5-grade)*(0.08+(5-grade)*0.02));
+    newEF = oldEF + (0.1 - (5 - grade) * (0.08 + (5 - grade) * 0.02));
     if (newEF < 1.3) { // 1.3 is the minimum EF
       card.EF = 1.3;
     } else {
@@ -184,7 +191,7 @@ function calcIntervalEF(card, grade) {
 }
 
 function writeCardFile(cardFile) {
-  fs.writeFile(cardFile, JSON.stringify(cards, null, 2), function(err) {
+  fs.writeFile(cardFile, JSON.stringify(cards, null, 2), function (err) {
     if (err) throw err;
     console.log("\nProgress saved back to file.");
   });
