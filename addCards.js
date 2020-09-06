@@ -8,9 +8,11 @@ var readline = require('readline');
 var rl = readline.createInterface(process.stdin, process.stdout);
 
 // Set card deck
-var cardFile = 'baseCards.json'
+studySet = "Base"
+var cardFile = 'cards' + studySet + '.json'
 
-console.log("Welcome to Command Line Spaced Repetition (Add cards)!\n" +
+console.log(`Study Set: ${studySet}\n` +
+    "Welcome to Command Line Spaced Repetition (Add cards)!\n" +
     "Here you can add cards to your specified deck:\n" +
     "When prompted for the front side, type what should be displayed.\n" +
     "When asked for the back side, type what the answer should be.\n" +
@@ -54,7 +56,7 @@ function updateDeck(newCard) {
         // Check if front side already exists in cards
         for (var x = 0; x < cards.length; x++) {
             currentCard = cards[x];
-            if (currentCard.side1 === newCard.side1) {
+            if (currentCard.side1.toLowerCase() === newCard.side1.toLowerCase()) {
                 console.log("Side1 already exists in deck");
                 process.exit(2);
             };
@@ -63,11 +65,11 @@ function updateDeck(newCard) {
         // Adding new data to card deck object
         cards.push(newCard);
 
-        // Write changes to card deck
+        // Write changes to card deck and beautify
         console.log("Adding new card...");
-        fs.writeFile(cardFile, JSON.stringify(cards), err => {
+        fs.writeFile(cardFile, JSON.stringify(cards, null, 2), err => {
 
-            // Checking for errors 
+            // Checking for errors
             if (err) throw err;
 
             console.log("Card added"); // Success 
