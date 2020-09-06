@@ -14,7 +14,8 @@
 var fs = require('fs');
 var readline = require('readline');
 
-var cardFile = 'baseCards.json',
+var studySet = "Base"
+var cardFile = "cards" + studySet + ".json",
     quizList = [],
     quizTimer = 4000,
     today = new Date(),
@@ -24,7 +25,8 @@ var cardFile = 'baseCards.json',
 
 today.setHours(0,0,0,0);
 
-console.log("Welcome to Command Line Spaced Repetition!\n" +
+console.log(`Study Set: ${studySet}\n` +
+  "Welcome to Command Line Spaced Repetition!\n" +
   "After each word please grade yourself as follows:\n" +
   "(0) What the heck was that? (No recognition)\n" +
   "(1) Wrong answer, but recognized the word.\n" +
@@ -106,7 +108,7 @@ function getNextCard(card) {
 }
 
 function quizCard(card) {
-  console.log("Side 1: " + card.side1);
+  console.log("\nSide 1: " + card.side1);
   setTimeout(function() {
     console.log("Side 2: " + card.side2);
     getUserInput("Grade> ", parseCardGrade, card);
