@@ -1,39 +1,31 @@
 Command Line Spaced Repetition
 =================
+
+<img src="./static/memo-graph.webp"  width=500>
+
 This is a command line spaced repetition program written in Javascript using Node.js.
 
-Spaced repetition is a learning technique that incorporates increasing intervals of time between subsequent review of 
-previously learned material in order to exploit the psychological spacing effect (<a href="http://en.wikipedia.org/wiki/Spaced_repetition">from Wikipedia</a>). 
+[Spaced repetition](http://en.wikipedia.org/wiki/Spaced_repetition) is a learning technique that incorporates increasing intervals of time between subsequent review of 
+previously learned material in order to exploit the psychological spacing effect.
 It is very useful for learning a new language or specific sets of information.
 
-<strong>Basically information you know well is shown less often, information you have trouble is shown more often.</strong>
+**Basically, information you know well is shown less often and information you don't know well is shown more often.**
 
 The algorithm implemented in this app is the SM-2 algorithm used in the SuperMemo-2 software as well as the popular 
-open source Anki software. The algorithm is described in detail here: http://www.supermemo.com/english/ol/sm2.htm
+open source Anki software. The algorithm is described in detail here: https://www.supermemo.com/en/archives1990-2015/english/ol/sm2
+
 
 To run
 ------
-- Make sure you have <a href="http://nodejs.org">Node.js</a> installed.
-- Clone the repo and create your word list (see baseCards.json)
-- On the command line run: node spaced.js
+- Make sure you have [Node.js](http://nodejs.org) installed.
+- Clone the repo and create your word list (see `cardsBase.json`)
+- On the command line run: 
+    - `node refactor.js`
 
-Why?
+Add cards via the command line
 ------
-This will likely turn into a web app, this was an opportunity to start small and learn a little more about Node.js.
-On the plus side, it's very distraction free :)
 
-Add cards
-------
-- On the command line run: node addCards.js
+- If you prefer to add cards via the command line rather than editting the raw JSON file you can run:
+    - `node addCards.js`
 
 Here you will be able to add new cards to a specified deck. You can also provide examples (delimited by underscores). Each example will be shown along with the answer in spaced repetition practice.
-
-TODO: 
-- record the history and all data to a real db, do something interesting with it
-- refactor
-- choose when to start or skip to answer without waiting 4 seconds?
-- choose input file from command line instead of hard coded
-
-License
------
-MIT
